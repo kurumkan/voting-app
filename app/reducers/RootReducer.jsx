@@ -4,8 +4,6 @@ import ReducerError from 'ReducerError';
 import {reducer as form} from 'redux-form';
 import AuthReducer from 'AuthReducer';
 
-
-
 const RootReducer = combineReducers({
 	polls: ReducerPolls,
 	error: ReducerError,
