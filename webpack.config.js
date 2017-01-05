@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
   entry: [
     'script!jquery/dist/jquery.min.js',
-    'script!foundation-sites/dist/foundation.min.js',
+    'script!bootstrap/dist/js/bootstrap.min.js',
     './app/app.jsx'
   ],
   externals: {
@@ -21,9 +21,17 @@ module.exports = {
   },
   resolve: {
     root: __dirname,
+    modulesDirectories: [
+      'node_modules',
+      './app/components',
+      './app/api',
+      './lib',
+      './app/actions',
+      './app/reducers',
+
+    ],
     alias: {
-      Main: 'app/components/Main.jsx',
-     
+      applicationStyles: 'app/styles/app.scss',
     },
     extensions: ['', '.js', '.jsx']
   },
@@ -36,6 +44,10 @@ module.exports = {
         },
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/
+      },
+      {
+        test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/,
+        loader: 'url-loader'
       }
     ]
   },
