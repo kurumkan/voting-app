@@ -4,8 +4,8 @@ export default class PollsList extends Component{
 	
 	render() {
 		return(
-			<div>
-				PollsList
+			<div className='row'>
+				
 			</div>
 		)
 	}
