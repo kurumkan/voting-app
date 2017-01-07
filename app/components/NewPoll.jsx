@@ -28,6 +28,7 @@ class NewPoll extends Component{
 				<h1 className="text-center">Make a New Poll</h1>
 				<div className="col-md-3"></div>
 				<div className="col-md-6">		
+					{this.renderAlert()}
 					<form onSubmit={ handleSubmit(this.handleFormSubmit.bind(this)) }>
 						<div className="form-group">
 							<label htmlFor="title">Title:</label>							

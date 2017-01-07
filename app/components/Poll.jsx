@@ -21,6 +21,17 @@ class Poll extends Component{
 		this.handleSubmit=this.handleSubmit.bind(this);
 	}
 
+	renderAlert(){
+		var {errorMessage} = this.props;
+			if(errorMessage){
+				return (
+				<div className='alert alert-danger'>
+					<strong>Oops!</strong> {errorMessage}
+				</div>
+			)
+		}
+	}
+
 	componentWillMount(){		
 		var id = this.props.params.id;	
 
@@ -168,6 +179,7 @@ class Poll extends Component{
 			<div className="row">		
 				<div className="col-md-3"></div>
 				<div className="col-md-6">
+					{this.renderAlert()}
 					<div className="panel panel-default">
 						<div className="panel-body">
 							<div>
@@ -203,6 +215,7 @@ Poll.contextTypes = {
 function mapStateToProps(state) {
   return {
     poll: state.polls.poll,
+    errorMessage: state.error
   };
 }
 

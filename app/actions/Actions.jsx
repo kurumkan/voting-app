@@ -20,7 +20,7 @@ export function getPolls(){
 export function getSinglePoll(id){
 	return function(dispatch){
 		axios.get(ROOT_URL+id)
-			.then((response)=>{					
+			.then((response)=>{									
 				dispatch({
 					type: 'GET_SINGLE_POLL',
 					payload: response
@@ -43,25 +43,40 @@ export function createPoll(poll){
 				browserHistory.push('polls/'+response.data.id);
 			})
 			.catch(()=>{				
-				browserHistory.push('polls/');
+				dispatch(setError('Something went wrong. We are working on it.'));
 			})			
 	}
 }
 
 export function deletePoll(id){
-	var request = axios.delete(ROOT_URL+id);
-	return{
-		type: 'DELETE_POLL',
-		payload: request
+	return function(dispatch){
+		axios.delete(ROOT_URL+id)
+			.then((response)=>{
+				dispatch({
+					type: 'DELETE_POLL',
+					payload: response
+				});
+				browserHistory.push('polls/');
+			})	
+			.catch(()=>{
+				dispatch(setError('Something went wrong. We are working on it.'));
+			})	
 	}
 }
 
 export function updatePoll(id, updatedPoll){
-	var request = axios.put(ROOT_URL+id, updatedPoll);
-	return {
-		type: 'UPDATE_POLL',
-		payload: request
-	}
+	return function(dispatch){
+		axios.put(ROOT_URL+id, updatedPoll)
+			.then((response)=>{
+				dispatch({
+					type: 'UPDATE_POLL',
+					payload: response
+				});
+			})
+			.catch(()=>{
+				dispatch(setError('Something went wrong. We are working on it.'));
+			})
+	}	
 }
 
 export function setError(error){
