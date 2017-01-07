@@ -6,13 +6,13 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
 
   switch (action.type) {
-    case 'GET_POLLS':
+    case 'GET_POLLS':    
       return {
         ...state,
-        all: action.payload.data.polls,
+        all: action.payload.data.polls
       };
 
-    case 'GET_SINGLE_POLL':
+    case 'GET_SINGLE_POLL':    
       return {
         ...state,
         poll: action.payload.data.poll,

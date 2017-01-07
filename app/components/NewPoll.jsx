@@ -1,79 +1,49 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {reduxForm} from 'redux-form';
 import {Link} from 'react-router';
 
-import {createPoll} from 'Actions';
+import * as actions from 'Actions';
 
-class NewPoll extends Component{	
-
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			title: "",
-			options: []
+class NewPoll extends Component{
+	renderAlert(){
+		var {errorMessage} = this.props;
+		if(errorMessage){
+			return (
+				<div className='alert alert-danger'>
+					<strong>Oops!</strong> {errorMessage}
+				</div>
+			)
 		}
-
-		this.handleSubmit = this.handleSubmit.bind(this);				
-		this.handleChange = this.handleChange.bind(this);
 	}
 
-	handleSubmit(e){
-		e.preventDefault();
-		var {title, options} = this.state;				
-
-		if(title&&options){				
-
-			var poll={
-				title,
-				options
-			};			
-			
-			var _this = this;
-			
-			this.props.createPoll(poll)
-				.then(function(result){		
-					var {id} = result.payload.data;					
-					_this.context.router.replace('/polls/'+id);
-				}, function(error){									
-					_this.context.router.replace('/')
-				});			
-		}		
-	}
-
-	handleChange(key){
-		return function (e) {
-			var state = {};
-			state[key] = e.target.value;
-			this.setState(state);
-	    }.bind(this);
+	handleFormSubmit({title, options}){
+		this.props.createPoll({title,options});
 	}
 
 	render() {
-		var {title, options} = this.state;
-				
+		var {handleSubmit, fields:{title, options}} = this.props;    
+
 		return (
 			<div className="row">
 				<h1 className="text-center">Make a New Poll</h1>
 				<div className="col-md-3"></div>
 				<div className="col-md-6">		
-					<form onSubmit={this.handleSubmit}>
+					<form onSubmit={ handleSubmit(this.handleFormSubmit.bind(this)) }>
 						<div className="form-group">
-							<label htmlFor="title">Title:</label>
+							<label htmlFor="title">Title:</label>							
 							<input 
-								value={title} onChange={this.handleChange('title')} 
-								type="text" name="title" className="form-control" id="title" 
-								required placeholder="Your Poll Title" 
+								className="form-control" placeholder="Your Poll Title" 
+								{...title}
 							/>
+							{(title.error&&title.touched)&&<div className='text-danger'>* {title.error}</div>}
 						</div>						
 						<div className="form-group">
 							<label htmlFor="options">Options</label>
-			  				<textarea 
-			  					value={options} onChange={this.handleChange('options')} 
-			  					className="form-control" name="options" rows="5" id="options" 
-			  					required placeholder="Type each option on a new line"  
+			  				<textarea 			  					
+			  					className="form-control" placeholder="Type each option on a new line"  
+			  					{...options}
 			  				/>
+			  				{(options.error&&options.touched)&&<div className='text-danger'>* {options.error}</div>}
 						</div>			
 						<button type="submit" className="btn btn-success">Save</button>						
 						<Link to="/" className="btn btn-default">Cancel</Link>			
@@ -83,14 +53,29 @@ class NewPoll extends Component{
 			</div>
 		);
 	}
+
 }
 
-NewPoll.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
+function validate(fromProps){
+	var errors = {}; 
 
-function mapDispatchToProps(dispatch){
-	return bindActionCreators({createPoll}, dispatch)
+	if(!fromProps.title){
+		errors.title = 'Please enter a title';
+	}
+
+	if(!fromProps.options){
+		errors.options = 'Please enter some options';
+	}
+
+	return errors;
 }
 
-export default connect(null, mapDispatchToProps)(NewPoll)
+function mapStateToProps(state){
+  	return {errorMessage: state.error}
+}
+
+export default reduxForm({
+	form: 'newpoll',
+	fields: ['title', 'options'],
+	validate: validate
+}, mapStateToProps, actions)(NewPoll);

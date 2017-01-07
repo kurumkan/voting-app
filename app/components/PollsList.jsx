@@ -3,56 +3,40 @@ import { connect } from 'react-redux';
 import {getPolls} from 'Actions';
 import PollsListItem from 'PollsListItem';
 
-
 class PollsList extends Component{
-
-	constructor(props) {
-		super(props);		
-		this.state={
-			error: ''
+	renderAlert(){		
+		var {errorMessage} = this.props;
+		if(errorMessage){
+			return (
+				<div className='alert alert-danger'>
+					<strong>Oops!</strong> {errorMessage}
+				</div>
+			)
 		}
 	}
+	componentWillMount() {			
+		this.props.getPolls();
+	}
 
-	componentWillMount() {
-		var _this=this;	
+	render (){		
+		var {polls} = this.props;
 		
-		this.props.getPolls().then(
-			(data)=>{
-				//if ok - do nothing				
-			},
-			(error)=>{
-				//in case of error - display a message
-				_this.setState({
-					error: 'Something went wrong. We are working on it.'
-				})
+		var renderPolls = () => {
+			if(!polls){				
+				return <div>Loading ...</div>
+			}else{
+				return polls.map((poll, i)=>{
+					return <PollsListItem poll={poll} key={i} />;
+				});
 			}
-		)
-	}
-
-	render (){
-		var {error} = this.state;		
-		//if error occured in api.getPolls - then render the error message
-		function renderError(){					
-			if(error){				
-				return (
-					<div className="alert alert-danger" role="alert">
-						{error}
-					</div>
-				)
-			}		
-		}
-		
-		const polls = this.props.polls.map((poll, i)=>{
-			return <PollsListItem poll={poll} key={i} />;
-		});
-
+		}				
 		return(
 			<div className="row">		
 				<div className="col-md-3"></div>
 					<div className="col-md-6">
-						{renderError()}
+						{this.renderAlert()}
 						<h1>Polls</h1>					
-						{polls}				
+						{renderPolls()}	
 					</div>
 				<div className="col-md-3"></div>				
 			</div>
@@ -64,6 +48,7 @@ class PollsList extends Component{
 function mapStateToProps(state) {
 	return {
 		polls: state.polls.all,
+		errorMessage: state.error
 	};
 }
 

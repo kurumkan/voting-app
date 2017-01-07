@@ -22,30 +22,13 @@ class Poll extends Component{
 	}
 
 	componentWillMount(){		
-		var _this = this;
 		var id = this.props.params.id;	
 
-		this.props.getSinglePoll(id)
-			.then(
-				function(data){								
-					//success
-				}, 
-				function(error){						
-					//redirect to NotFound404 component			
-					_this.context.router.replace('404')
-				}
-			);					
+		this.props.getSinglePoll(id);			
 	}
 
 	handleDelete(e){				
-		var _this = this;
-
-		this.props.deletePoll(this.props.params.id)
-			.then(function(data){					
-				_this.context.router.replace('/');
-			}, function(error){	
-				_this.context.router.replace('/');
-			});		
+		this.props.deletePoll(this.props.params.id);					
 	}
 
 	handleChange(key){
@@ -108,22 +91,13 @@ class Poll extends Component{
 				selectValue: 0,
 				showTextInput: false
 			},()=>{				
-				this.refs.chart.chart_instance.update();
-				var _this = this;
-				this.props.updatePoll(id, poll)
-					.then(
-						function(data){
-							_this.context.router.replace('/polls/'+id);				
-						}, 
-						function(error){
-							_this.context.router.replace('/');
-						}
-					);
+				this.refs.chart.chart_instance.update();				
+				this.props.updatePoll(id, poll)					
 		});
 	}
 
 	render(){	
-	    var {poll} = this.props;	
+	    var {poll} = this.props;		    
 		if(!poll)
 			return <h3 className="text-center">Loading ...</h3>;
 		

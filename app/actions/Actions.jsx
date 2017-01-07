@@ -3,28 +3,49 @@ import {browserHistory} from 'react-router';
 const ROOT_URL = '/api/polls/';
 
 export function getPolls(){
-	var request = axios.get(ROOT_URL);
-
-	return {
-		type: 'GET_POLLS',
-		payload: request
-	};
+	return function(dispatch){
+		axios.get(ROOT_URL)
+			.then((response)=>{					
+				dispatch({
+					type: 'GET_POLLS',
+					payload: response
+				});
+			})
+			.catch(()=>{
+				dispatch(setError('Something went wrong. We are working on it.'));
+			})
+	}	
 }
 
 export function getSinglePoll(id){
-	var request = axios.get(ROOT_URL+id);
-	return {
-		type: 'GET_SINGLE_POLL',
-		payload: request
-	};	
+	return function(dispatch){
+		axios.get(ROOT_URL+id)
+			.then((response)=>{					
+				dispatch({
+					type: 'GET_SINGLE_POLL',
+					payload: response
+				});
+			})
+			.catch(()=>{				
+				browserHistory.push('404');
+			})		
+	}	
 }
 
 export function createPoll(poll){
-	var request = axios.post(ROOT_URL, poll);
-	return {
-	    type: 'CREATE_POLL',
-	    payload: request,
-	};
+	return function(dispatch){
+		axios.post(ROOT_URL, poll)
+			.then((response)=>{					
+				dispatch({
+					type: 'CREATE_POLL',	
+					payload: response
+				});				
+				browserHistory.push('polls/'+response.data.id);
+			})
+			.catch(()=>{				
+				browserHistory.push('polls/');
+			})			
+	}
 }
 
 export function deletePoll(id){
@@ -43,60 +64,9 @@ export function updatePoll(id, updatedPoll){
 	}
 }
 
-
-export function signinUser({email, password}){
-	//by using redux-thunk we have direct access to dispatch method
-	//also action creator now returns a function, no an object
-	//this function will immediately be called by redux thunk with dispatch method
-	return function(dispatch){		
-		axios.post('/signin', {email, password})
-			.then((response)=>{				
-				//-update state to indicate user is authenticated
-				dispatch({type: 'AUTH_USER'});
-				//-save jwt token
-				localStorage.setItem('token', response.data.token);
-				//-redirect to the secret page
-				browserHistory.push('/');
-			})
-			.catch(()=>{
-				//- show error message
-				dispatch(authError('Bad Login Info'));
-			});
-	}	
-}
-
-export function signupUser({email, password}){
-	//by using redux-thunk we have direct access to dispatch method
-	//also action creator now returns a function, no an object
-	//this function will immediately be called by redux thunk with dispatch method
-	
-	return function(dispatch){		
-		axios.post(API_URL+'/signup', {email, password})
-			.then((response)=>{				
-				//-update state to indicate user is authenticated
-				dispatch({type: 'AUTH_USER'});
-				//-save jwt token
-				localStorage.setItem('token', response.data.token);
-				//-redirect to the secret page
-				browserHistory.push('/');
-			})
-			.catch(()=>{
-				//- show error message
-				dispatch(authError('This email is already in use'));
-			});
-	}	
-}
-
-export function authError(error){
+export function setError(error){
 	return {
-		type: 'AUTH_ERROR',
+		type: 'ERROR',
 		payload: error
-	}
-}
-
-export function signoutUser(){
-	localStorage.removeItem('token');
-	return {
-		type: 'UNAUTH_USER'
 	}
 }

@@ -72,7 +72,7 @@ app.get("/api/polls", function(request, response){
 		if(error){
 			handle500(response, error);
 		}else{							
-			response.json({polls: polls});		
+			response.json({polls: polls});					
 		}
 	});	
 });
@@ -80,22 +80,7 @@ app.get("/api/polls", function(request, response){
 //require auth
 app.post("/api/polls", function(request, response){		
 
-	var {title, options} = request.body;	
-	var author = {
-		id: request.user._id,
-		username: request.user.username
-	}
-
-	var {title, options} = request.body;
-	console.log(request.user)
-	var author = {
-		id: request.user._id,
-		username: request.user.username
-	}
-
-	var {title, options} = request.body;
-	console.log(request.user)
-
+	var {title, options} = request.body;		
 
 	options = options.split(/\r?\n/)
 	    .filter((option)=>option.trim().length);	
@@ -114,18 +99,8 @@ app.post("/api/polls", function(request, response){
 	Poll.create(poll, function(error, newPoll){
 		if(error){			
 			handle500(response, error);
-		}else{			
-			User.findById(author.id, function(error, user){
-				if(error){			
-					handle500(response, error);		
-				}else{					
-					
-					user.polls.push(newPoll);					
-					user.save();					
-					response.json({id: newPoll._id});					
-				}
-			});
-			
+		}else{		
+			response.json({id: newPoll._id});						
 		}
 	});	
 });

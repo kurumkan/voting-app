@@ -5,7 +5,6 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import ReduxPromise from 'redux-promise';
 
 
 //Load bootstrap
@@ -23,7 +22,7 @@ import Poll from 'Poll';
 import NotFound404 from 'NotFound404';
 
 
-var createStoreWithMiddleware = applyMiddleware(ReduxThunk, ReduxPromise)(createStore);
+var createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore);
 
 var store = createStoreWithMiddleware(RootReducer);
 var token = localStorage.getItem('token');
