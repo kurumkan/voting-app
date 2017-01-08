@@ -5,6 +5,13 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var morgan = require('morgan');
 
+//auth dependencies
+var Auth = require('./auth/authentication');
+var PassportServicer = require('./auth/passport');
+var passport = require('passport');
+var requireAuth = passport.authenticate('jwt', {session: false});
+var requireSignin = passport.authenticate('local', {session: false});
+
 var {handle500} = require("./lib/utils");
 
 //mongoose.connect(process.env.MONGOLAB_URI);
@@ -65,6 +72,9 @@ Poll.create({
 	}		
 });	
 
+//auth routes
+app.post('/signin', requireSignin, Auth.signin);
+app.post('/signup', Auth.signup);
 
 //OK
 app.get("/api/polls", function(request, response){		
