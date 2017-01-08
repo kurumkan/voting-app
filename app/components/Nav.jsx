@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import activeComponent from 'react-router-active-component';
-import {IndexLink} from 'react-router';
+import {connect} from 'react-redux';
+import {IndexLink, Link} from 'react-router';
 
-export default class Nav extends Component{
-	constructor(props) {
-		super(props);
-		this.handleSignOut = this.handleSignOut.bind(this);
-	}
-
-	handleSignOut(e){
-		alert('clicked sign out')		
-	}
+class Nav extends Component{	
 
 	render() {
 		var NavLink=activeComponent('li');
@@ -54,5 +47,15 @@ export default class Nav extends Component{
 			</nav>
 		);		
 	}
-
 }	
+
+
+function mapStateToProps(state){
+	return { authenticated: state.auth.authenticated}
+}
+
+export default connect(mapStateToProps, null)(Nav);
+
+
+
+

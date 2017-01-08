@@ -85,3 +85,53 @@ export function setError(error){
 		payload: error
 	}
 }
+
+
+export function signinUser({login, password}){	
+	
+	return function(dispatch){		
+		axios.post('/signin', {login, password})
+			.then((response)=>{				
+				//-update state to indicate user is authenticated
+				dispatch({type: 'AUTH_USER'});
+				//-save jwt token
+				localStorage.setItem('token', response.data.token);
+
+				browserHistory.push('/');
+			})
+			.catch(()=>{
+				//- show error message
+				dispatch(setError('Bad Login Info'));
+			});
+	}	
+}
+
+export function signupUser({username, email, password}){
+	//by using redux-thunk we have direct access to dispatch method
+	//also action creator now returns a function, no an object
+	//this function will immediately be called by redux thunk with dispatch method
+	
+	return function(dispatch){		
+		axios.post('/signup', {username, email, password})
+			.then((response)=>{				
+				//-update state to indicate user is authenticated
+				dispatch({type: 'AUTH_USER'});
+				//-save jwt token
+				localStorage.setItem('token', response.data.token);
+				
+				browserHistory.push('/');
+			})
+			.catch(()=>{
+				//- show error message
+				dispatch(setError('This email or username are already in use'));
+			});
+	}	
+}
+
+export function signoutUser(){
+	localStorage.removeItem('token');
+	return {
+		type: 'UNAUTH_USER'
+	}
+}
+
