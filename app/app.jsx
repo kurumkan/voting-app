@@ -21,6 +21,11 @@ import MyPolls from 'MyPolls';
 import Poll from 'Poll';
 import NotFound404 from 'NotFound404';
 
+//auth components
+import Signin from 'Signin';
+import Signup from 'Signup';
+import Signout from 'Signout';
+
 
 var createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore);
 
@@ -39,7 +44,12 @@ ReactDOM.render(
 			 	<Route path="polls" component={PollsList} /> 
 				<Route path="polls/new" component={NewPoll} />			
 				<Route path="polls/mypolls" component={MyPolls} />			
-				<Route path="polls/:id" component={Poll} />									
+				<Route path="polls/:id" component={Poll} />
+
+				<Route path='signup' component={Signup}/>	
+				<Route path='signin' component={Signin}/>
+				<Route path='signout' component={Signout}/>
+
 				<Route path='404' component={NotFound404} />
 				<Route path='*' component={NotFound404} />	
 			</Route>		

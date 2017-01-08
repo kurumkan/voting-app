@@ -33,6 +33,7 @@ class NewPoll extends Component{
 						<div className="form-group">
 							<label htmlFor="title">Title:</label>							
 							<input 
+								id="title"
 								className="form-control" placeholder="Your Poll Title" 
 								{...title}
 							/>
@@ -40,7 +41,8 @@ class NewPoll extends Component{
 						</div>						
 						<div className="form-group">
 							<label htmlFor="options">Options</label>
-			  				<textarea 			  					
+			  				<textarea 
+			  					id="options"			  					
 			  					className="form-control" placeholder="Type each option on a new line"  
 			  					{...options}
 			  				/>
