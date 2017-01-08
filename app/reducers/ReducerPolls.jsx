@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   all: [],
   poll: null,
+  userpolls: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -17,6 +18,12 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         poll: action.payload.data.poll,
       };
+
+    case 'GET_USER_POLLS':
+      return {
+        ...state,
+        userpolls: action.payload.data.polls
+      }
 
     default:
       return state;

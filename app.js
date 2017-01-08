@@ -53,7 +53,7 @@ app.get("/api/polls", function(request, response){
 //create (requeres authorization)
 app.post("/api/polls", requireAuth, function(request, response){		
 
-	var {title, options} = request.body;	
+	var {title, options} = request.body;		
 	
 	var author = {
 		id: request.user._id,
@@ -134,8 +134,7 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 		if(error)
 			handle500(error)
 		else{
-			//the user is the poll's author
-			console.log(poll.author)
+			//the user is the poll's author			
 			if(poll.author.id.equals(request.user._id)){
 				Poll.findByIdAndRemove(id, function(error){
 					if(error)
@@ -153,7 +152,7 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 //show all the users polls (requires authorization)
 app.get("/api/mypolls", requireAuth, function(request, response){
 
-	User.findById(request.user._id).populate('polls').exec(function(error, data){
+	User.findById(request.user._id).populate('polls').sort("-created").limit(15).exec(function(error, data){
 		if(error)handle500(error);
 		else{
 			var polls = data.polls.map((poll)=>{

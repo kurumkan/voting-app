@@ -43,7 +43,7 @@ ReactDOM.render(
 				<IndexRoute component={PollsList} />		
 			 	<Route path="polls" component={PollsList} /> 
 				<Route path="polls/new" component={NewPoll} />			
-				<Route path="polls/mypolls" component={MyPolls} />			
+				<Route path="mypolls" component={MyPolls} />			
 				<Route path="polls/:id" component={Poll} />
 
 				<Route path='signup' component={Signup}/>	

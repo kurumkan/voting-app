@@ -13,7 +13,7 @@ class Nav extends Component{
 				<div className="collapse navbar-collapse" id="navbar">
 					<ul className="nav navbar-nav">
 						<NavLink to="/" onlyActiveOnIndex>Home</NavLink>							
-						<NavLink to="/polls/mypolls">My Polls</NavLink>							
+						<NavLink to="/mypolls">My Polls</NavLink>							
 						<NavLink to="/polls/new">New Poll</NavLink>							
 					</ul>
 					<ul className="nav navbar-nav navbar-right">							

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {browserHistory} from 'react-router';
+
 const ROOT_URL = '/api/polls/';
 
 export function getPolls(){
@@ -10,9 +11,10 @@ export function getPolls(){
 					type: 'GET_POLLS',
 					payload: response
 				});
+				dispatch(removeErroMessage());
 			})
-			.catch(()=>{
-				dispatch(setError('Something went wrong. We are working on it.'));
+			.catch(()=>{				
+				dispatch(setErrorMessage('Something went wrong. We are working on it.'));
 			})
 	}	
 }
@@ -25,41 +27,56 @@ export function getSinglePoll(id){
 					type: 'GET_SINGLE_POLL',
 					payload: response
 				});
+				dispatch(removeErroMessage());
 			})
 			.catch(()=>{				
 				browserHistory.push('404');
 			})		
 	}	
 }
-
+			
 export function createPoll(poll){
 	return function(dispatch){
-		axios.post(ROOT_URL, poll)
+		axios.post(ROOT_URL, poll, {
+			headers: {authorization: localStorage.getItem('token')}				
+		})
 			.then((response)=>{					
 				dispatch({
 					type: 'CREATE_POLL',	
 					payload: response
 				});				
 				browserHistory.push('polls/'+response.data.id);
+				dispatch(removeErroMessage());
 			})
-			.catch(()=>{				
-				dispatch(setError('Something went wrong. We are working on it.'));
+			.catch((error)=>{
+				if(error.response.status==401){
+					dispatch(setErrorMessage("Only authorized users can create polls"));	
+				}else{
+					dispatch(setErrorMessage('Something went wrong. We are working on it.'));	
+				}				
 			})			
 	}
 }
 
 export function deletePoll(id){
 	return function(dispatch){
-		axios.delete(ROOT_URL+id)
+		axios.delete(ROOT_URL+id, {
+			headers: {authorization: localStorage.getItem('token')}				
+		})
 			.then((response)=>{
 				dispatch({
 					type: 'DELETE_POLL',
 					payload: response
 				});
 				browserHistory.push('polls/');
+				dispatch(removeErroMessage());
 			})	
-			.catch(()=>{
-				dispatch(setError('Something went wrong. We are working on it.'));
+			.catch((error)=>{
+				if(error.response.status==403){
+					dispatch(setErrorMessage("Only the poll's author can delete it!"));	
+				}else{
+					dispatch(setErrorMessage('Something went wrong. We are working on it.'));	
+				}				
 			})	
 	}
 }
@@ -72,17 +89,46 @@ export function updatePoll(id, updatedPoll){
 					type: 'UPDATE_POLL',
 					payload: response
 				});
+				dispatch(removeErroMessage());
 			})
 			.catch(()=>{
-				dispatch(setError('Something went wrong. We are working on it.'));
+				dispatch(setErrorMessage('Something went wrong. We are working on it.'));
 			})
 	}	
 }
 
-export function setError(error){
+export function getUserPolls(){
+	return function(dispatch){
+		axios.get('/api/mypolls', {
+			headers: {authorization: localStorage.getItem('token')}				
+		})
+			.then((response)=>{					
+				dispatch({
+					type: 'GET_USER_POLLS',
+					payload: response
+				});
+				dispatch(removeErroMessage());
+			})
+			.catch((error)=>{
+				if(error.response.status==401){
+					dispatch(setErrorMessage("Please sign in or create a new account!"));	
+				}else{
+					dispatch(setErrorMessage('Something went wrong. We are working on it.'));	
+				}				
+			})		
+	}	
+}
+
+export function setErrorMessage(error){
 	return {
-		type: 'ERROR',
+		type: 'SET_ERROR',
 		payload: error
+	}
+}
+
+export function removeErroMessage(){
+	return {
+		type: 'REMOVE_ERROR'
 	}
 }
 
@@ -98,10 +144,12 @@ export function signinUser({login, password}){
 				localStorage.setItem('token', response.data.token);
 
 				browserHistory.push('/');
+
+				dispatch(removeErroMessage());
 			})
 			.catch(()=>{
 				//- show error message
-				dispatch(setError('Bad Login Info'));
+				dispatch(setErrorMessage('Bad Login Info'));
 			});
 	}	
 }
@@ -120,10 +168,12 @@ export function signupUser({username, email, password}){
 				localStorage.setItem('token', response.data.token);
 				
 				browserHistory.push('/');
+
+				dispatch(removeErroMessage());
 			})
 			.catch(()=>{
 				//- show error message
-				dispatch(setError('This email or username are already in use'));
+				dispatch(setErrorMessage('This email or username are already in use'));
 			});
 	}	
 }
