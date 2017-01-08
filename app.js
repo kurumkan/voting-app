@@ -33,50 +33,11 @@ app.use(morgan('combined'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json({type:'*/*'}));
 
-
-Poll.remove({}, function(err, data){
-	if(err){
-		console.log('error', err)
-	}else{
-		console.log('ok')
-	}
-});
-
-Poll.create({
-	title: 'Dogs',
-	options: [
-		{label: 'Husky', count: 4, backgroundColor: 'red'},
-		{label: 'Bulldog', count: 1, backgroundColor: 'green'},
-		{label: 'Bankhar', count: 5,backgroundColor: 'blue' }
-	]	
-}, function(err, data){
-	if(err){
-		console.log('error', err)
-	}else{
-		console.log('ok')
-	}		
-});	
-
-Poll.create({
-	title: 'Cities',
-	options: [
-		{label: 'New York', count: 23, backgroundColor: 'orange'},
-		{label: 'Chicago', count: 12, backgroundColor: 'yellow'},
-		{label: 'Berlin', count: 33,backgroundColor: 'brown' }
-	]	
-}, function(err, data){
-	if(err){
-		console.log('error', err)
-	}else{
-		console.log('ok')
-	}		
-});	
-
 //auth routes
 app.post('/signin', requireSignin, Auth.signin);
 app.post('/signup', Auth.signup);
 
-//OK
+//index
 app.get("/api/polls", function(request, response){		
 	Poll.find({}).sort("-created").limit(15).exec(function(error, polls){
 		if(error){
@@ -87,7 +48,7 @@ app.get("/api/polls", function(request, response){
 	});	
 });
 
-//require auth
+//create (requeres authorization)
 app.post("/api/polls", requireAuth, function(request, response){		
 
 	var {title, options} = request.body;	
@@ -131,7 +92,7 @@ app.post("/api/polls", requireAuth, function(request, response){
 	});	
 });
 
-//OK
+//show
 app.get("/api/polls/:id", function(request, response){			
 	Poll.findById(request.params.id, function(error, poll){		
 		if(error)
@@ -142,7 +103,7 @@ app.get("/api/polls/:id", function(request, response){
 	});	
 });
 
-//require auth
+//update
 app.put("/api/polls/:id",function(request, response){		
 	var id = request.params.id;		
 	var {title, options} = request.body;
@@ -161,7 +122,7 @@ app.put("/api/polls/:id",function(request, response){
 	});
 });
 
-//requires auth
+//destroy (requires authorization)
 app.delete("/api/polls/:id", requireAuth, function(request, response){		
 
 	var id = request.params.id;			
@@ -187,32 +148,27 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 	});
 });
 
-
-app.get("/api/mypolls", function(request, response){
+//show all the users polls (requires authorization)
+app.get("/api/mypolls", requireAuth, function(request, response){
 
 	User.findById(request.user._id).populate('polls').exec(function(error, data){
 		if(error)handle500(error);
-		else{			
-			response.json({polls: data.polls})
+		else{
+			var polls = data.polls.map((poll)=>{
+				return {
+					id: poll._id,
+					title: poll.title,
+					created: poll.created
+				}	
+			});			
+			response.json({polls: polls})
 		}
 	})
 });
 
-app.get("/api/mypolls", function(request, response){		
-	Poll.find({author: {id: request.user._id}}).sort("-created").exec(function(error, polls){
-		if(error){
-			handle500(response, error);
-		}else{							
-			response.json({polls: polls});		
-		}
-	});	
-});
-
-
 app.get('*', function (request, response){	
 	response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 });
-
 
 app.set("port", process.env.PORT||5000);
 
