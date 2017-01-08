@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
 	username: {type: String, unique:true, lowercase: true},
 	email: {type: String, unique:true, lowercase: true},
-	password: String
+	password: String,
+	polls: [{type : mongoose.Schema.Types.ObjectId, ref: 'Poll'}]
 });
 
 //before saving (presave) - enctypt password

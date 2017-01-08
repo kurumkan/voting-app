@@ -88,9 +88,14 @@ app.get("/api/polls", function(request, response){
 });
 
 //require auth
-app.post("/api/polls", function(request, response){		
+app.post("/api/polls", requireAuth, function(request, response){		
 
-	var {title, options} = request.body;		
+	var {title, options} = request.body;	
+	
+	var author = {
+		id: request.user._id,
+		username: request.user.username
+	}
 
 	options = options.split(/\r?\n/)
 	    .filter((option)=>option.trim().length);	
@@ -103,14 +108,25 @@ app.post("/api/polls", function(request, response){
 
 	var poll = {
 		title: title,
-		options: formattedOptions
+		options: formattedOptions,
+		author: author
 	};	
 
 	Poll.create(poll, function(error, newPoll){
 		if(error){			
 			handle500(response, error);
-		}else{		
-			response.json({id: newPoll._id});						
+		}else{			
+			User.findById(author.id, function(error, user){
+				if(error){			
+					handle500(response, error);		
+				}else{					
+					
+					user.polls.push(newPoll);					
+					user.save();					
+					response.json({id: newPoll._id});					
+				}
+			});
+			
 		}
 	});	
 });
@@ -146,14 +162,28 @@ app.put("/api/polls/:id",function(request, response){
 });
 
 //requires auth
-app.delete("/api/polls/:id", function(request, response){		
+app.delete("/api/polls/:id", requireAuth, function(request, response){		
+
 	var id = request.params.id;			
 
-	Poll.findByIdAndRemove(id, function(error){
+	//check poll ownership
+	Poll.findById(id, function(error, poll){
 		if(error)
-			handle500(error);
-		else
-			response.json({id: id});				
+			handle500(error)
+		else{
+			//the user is the poll's author
+			console.log(poll.author)
+			if(poll.author.id.equals(request.user._id)){
+				Poll.findByIdAndRemove(id, function(error){
+					if(error)
+						handle500(error);
+					else
+						response.json({id: id});				
+				});
+			}else{
+				response.status(403).send({error:"Only the poll's author can delete it!"});
+			}
+		}
 	});
 });
 
