@@ -152,12 +152,15 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 //show all the users polls (requires authorization)
 app.get("/api/mypolls", requireAuth, function(request, response){
 
-	User.findById(request.user._id).populate('polls').sort("-created").limit(15).exec(function(error, data){
+	//User.findById(request.user._id).populate('polls').sort("-created").limit(15).exec(function(error, data){
+	User.findById(request.user._id)
+		.populate({path: 'polls', options:{sort: {'created': -1}}})
+		.exec(function(error, data){	
 		if(error)handle500(error);
-		else{
-			var polls = data.polls.map((poll)=>{
+		else{					
+			var polls = data.polls.map((poll)=>{				
 				return {
-					id: poll._id,
+					_id: poll._id,
 					title: poll.title,
 					created: poll.created
 				}	

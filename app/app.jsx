@@ -20,6 +20,7 @@ import NewPoll from 'NewPoll';
 import MyPolls from 'MyPolls';
 import Poll from 'Poll';
 import NotFound404 from 'NotFound404';
+import IndexPage from 'IndexPage';
 
 //auth components
 import Signin from 'Signin';
@@ -40,8 +41,8 @@ ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>	
 			<Route path="/" component={Main}>	
-				<IndexRoute component={PollsList} />		
-			 	<Route path="polls" component={PollsList} /> 
+				<IndexRoute component={IndexPage} />		
+			 	<Route path="polls" component={IndexPage} /> 
 				<Route path="polls/new" component={NewPoll} />			
 				<Route path="mypolls" component={MyPolls} />			
 				<Route path="polls/:id" component={Poll} />

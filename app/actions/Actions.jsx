@@ -97,12 +97,12 @@ export function updatePoll(id, updatedPoll){
 	}	
 }
 
-export function getUserPolls(){
+export function getUserPolls(){	
 	return function(dispatch){
 		axios.get('/api/mypolls', {
 			headers: {authorization: localStorage.getItem('token')}				
 		})
-			.then((response)=>{					
+			.then((response)=>{				
 				dispatch({
 					type: 'GET_USER_POLLS',
 					payload: response

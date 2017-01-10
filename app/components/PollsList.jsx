@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {getPolls} from 'Actions';
 import PollsListItem from 'PollsListItem';
 
-class PollsList extends Component{
+export default class PollsList extends Component{
+	
 	renderAlert(){		
 		var {errorMessage} = this.props;
 		if(errorMessage){
@@ -13,10 +12,7 @@ class PollsList extends Component{
 				</div>
 			)
 		}
-	}
-	componentWillMount() {			
-		this.props.getPolls();
-	}
+	}	
 
 	render (){		
 		var {polls} = this.props;
@@ -43,13 +39,3 @@ class PollsList extends Component{
 		)
 	}
 }
-
-
-function mapStateToProps(state) {
-	return {
-		polls: state.polls.all,
-		errorMessage: state.error
-	};
-}
-
-export default connect(mapStateToProps, {getPolls})(PollsList);
