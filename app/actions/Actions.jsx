@@ -189,6 +189,7 @@ export function signupUser({username, email, password}){
 
 export function signoutUser(){
 	localStorage.removeItem('token');
+	localStorage.removeItem('username');
 	return {
 		type: 'UNAUTH_USER'
 	}

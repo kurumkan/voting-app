@@ -26,6 +26,7 @@ import IndexPage from 'IndexPage';
 import Signin from 'Signin';
 import Signup from 'Signup';
 import Signout from 'Signout';
+import RequireAuth from 'RequireAuth';
 
 
 var createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore);
@@ -40,20 +41,20 @@ if(token){
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Router history={browserHistory}>	
-			<Route path="/" component={Main}>	
-				<IndexRoute component={IndexPage} />		
-			 	<Route path="polls" component={IndexPage} /> 
-				<Route path="polls/new" component={NewPoll} />			
-				<Route path="mypolls" component={MyPolls} />			
+		<Router history={browserHistory}>
+			<Route path="/" component={Main}>
+				<IndexRoute component={IndexPage} />
+			 	<Route path="polls" component={IndexPage} />
+				<Route path="polls/new" component={RequireAuth(NewPoll)} />
+				<Route path="mypolls" component={RequireAuth(MyPolls)} />
 				<Route path="polls/:id" component={Poll} />
 
-				<Route path='signup' component={Signup}/>	
+				<Route path='signup' component={Signup}/>
 				<Route path='signin' component={Signin}/>
 				<Route path='signout' component={Signout}/>
 
 				<Route path='404' component={NotFound404} />
-				<Route path='*' component={NotFound404} />	
+				<Route path='*' component={NotFound404} />
 			</Route>		
 		</Router>
 	</Provider>,	
