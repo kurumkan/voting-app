@@ -36,7 +36,8 @@ var token = localStorage.getItem('token');
 
 if(token){	
 	var username = localStorage.getItem('username');
-	store.dispatch({type:'AUTH_USER', payload: username});
+	var userid = localStorage.getItem('userid');
+	store.dispatch({type:'AUTH_USER', payload: {username, userid}});
 }
 
 ReactDOM.render(

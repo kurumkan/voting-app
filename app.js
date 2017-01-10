@@ -141,7 +141,7 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 						handle500(error);
 					else
 						response.json({id: id});				
-				});
+				});								
 			}else{
 				response.status(403).send({error:"Only the poll's author can delete it!"});
 			}

@@ -29,8 +29,12 @@ export function getSinglePoll(id){
 				});
 				dispatch(removeErroMessage());
 			})
-			.catch(()=>{				
-				browserHistory.push('404');
+			.catch((error)=>{								
+				if(error.response.status==404){
+					browserHistory.push('404');
+				}else{
+					dispatch(setErrorMessage('Something went wrong. We are working on it.'));	
+				}				
 			})		
 	}	
 }
@@ -139,14 +143,18 @@ export function signinUser({login, password}){
 		axios.post('/signin', {login, password})
 			.then((response)=>{				
 				//-update state to indicate user is authenticated
-				var {username} = response.data;
+				var {username, userid, token} = response.data;
 				dispatch({
 					type: 'AUTH_USER', 
-					payload: username
+					payload: {
+						username,
+						userid
+					}
 				});
 				//-save jwt token
-				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('token', token);
 				localStorage.setItem('username', username);
+				localStorage.setItem('userid', userid);
 
 				browserHistory.push('/');
 
@@ -166,19 +174,24 @@ export function signupUser({username, email, password}){
 	
 	return function(dispatch){		
 		axios.post('/signup', {username, email, password})
-			.then((response)=>{				
+			.then((response)=>{			
+				var {username, userid, token} = response.data;	
 				//-update state to indicate user is authenticated
 				dispatch({
 					type: 'AUTH_USER', 
-					payload: username
+					payload: {
+						username,
+						userid
+					}
 				});
 				//-save jwt token
-				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('token', token);
 				localStorage.setItem('username', username);
+				localStorage.setItem('userid', userid);
 				
 				browserHistory.push('/');
 
-				dispatch(removeErroMessage());				
+				dispatch(removeErroMessage());	
 			})
 			.catch((e)=>{
 				//- show error message
@@ -190,6 +203,7 @@ export function signupUser({username, email, password}){
 export function signoutUser(){
 	localStorage.removeItem('token');
 	localStorage.removeItem('username');
+	localStorage.removeItem('userid');
 	return {
 		type: 'UNAUTH_USER'
 	}

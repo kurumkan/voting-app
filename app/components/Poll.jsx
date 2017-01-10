@@ -108,11 +108,13 @@ class Poll extends Component{
 	}
 
 	render(){	
-	    var {poll} = this.props;		    
+	    var {poll, authenticated, userid} = this.props;		    
+
 		if(!poll)
 			return <h3 className="text-center">Loading ...</h3>;
 		
-		var {options, title, _id} = poll;	
+		var {options, title, _id} = poll;				
+
 
 		var labels = options.map((option)=>option.label);
 		var backgroundColor = options.map((option)=>option.backgroundColor);
@@ -132,6 +134,7 @@ class Poll extends Component{
 			},
 			cutoutPercentage: 40
 		};
+
 
 		var renderTextInput = ()=> {
 			if(this.state.showTextInput)
@@ -166,15 +169,17 @@ class Poll extends Component{
 									)
 								})
 							}		
-							<option value='newOption'>I would like a custom option</option>								
+							{
+								authenticated&&(<option value='newOption'>I would like a custom option</option>)
+							}
 						</select>						
 					</div>	
-					{renderTextInput()}
+					{authenticated&&renderTextInput()}
 					<button type="submit" className='btn btn-success'>Vote</button>					
 				</form>	
 			);			
 		};	
-
+		console.log(userid, poll.author.id)
 		return (
 			<div className="row">		
 				<div className="col-md-3"></div>
@@ -195,9 +200,11 @@ class Poll extends Component{
 								{renderForm()}
 							</div>
 						</div>
-						<div className="panel-footer text-right">							
-							<button className="btn btn-danger" onClick={this.handleDelete} >Delete</button>							
-						</div>
+						{
+							authenticated&&userid==poll.author.id&&(<div className="panel-footer text-right">							
+								<button className="btn btn-danger" onClick={this.handleDelete} >Delete</button>							
+							</div>)
+						}
 					</div>	
 				</div>
 				<div className="col-md-3"></div> 		
@@ -214,8 +221,10 @@ Poll.contextTypes = {
 
 function mapStateToProps(state) {
   return {
-    poll: state.polls.poll,
-    errorMessage: state.error
+    poll: state.polls.poll,    
+    errorMessage: state.error,
+    authenticated: state.auth.authenticated,
+    userid: state.auth.userid
   };
 }
 

@@ -39,7 +39,7 @@ exports.signup = function(request, response, next){
 				if(error)
 					return next(error);
 				else
-					response.json({token: getToken(newUser)});
+					response.json({token: getToken(newUser), username: newUser.username, userid: newUser.id});
 			});
 			
 		}
@@ -50,6 +50,6 @@ exports.signup = function(request, response, next){
 exports.signin = function(request, response, next){
 	//At this stage user has authorized their password and email
 	//we need give a token!
-	var user = request.user;	
-	response.send({token: getToken(user), username: user.username})
+	var user = request.user;		
+	response.send({token: getToken(user), username: user.username, userid: user.id})
 }
