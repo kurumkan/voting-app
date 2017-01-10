@@ -12,7 +12,7 @@ class MyPolls extends Component{
 	render (){			
 		var {polls, errorMessage} = this.props;				
 		return(
-			<PollsList polls={polls} errorMessage={errorMessage} />
+			<PollsList polls={polls} errorMessage={errorMessage} title={'My Polls'} />
 		);
 	}
 }

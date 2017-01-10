@@ -34,7 +34,8 @@ var store = createStoreWithMiddleware(RootReducer);
 var token = localStorage.getItem('token');
 
 if(token){	
-	store.dispatch({type:'AUTH_USER'});
+	var username = localStorage.getItem('username');
+	store.dispatch({type:'AUTH_USER', payload: username});
 }
 
 ReactDOM.render(

@@ -6,7 +6,7 @@ import {IndexLink, Link} from 'react-router';
 class Nav extends Component{	
 
 	renderLinks(){
-		var {authenticated} = this.props;
+		var {authenticated, username} = this.props;
 		var NavLink=activeComponent('li');
 		if(authenticated){
 			return (
@@ -21,7 +21,7 @@ class Nav extends Component{
 							<a href="#" className="dropdown-toggle" 
 								data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
 							>
-								Michael Jackson <span className="caret"></span>
+								{username} <span className="caret"></span>
 							</a>
 							<ul className="dropdown-menu">
 								<li>
@@ -70,7 +70,8 @@ class Nav extends Component{
 }	
 
 function mapStateToProps(state){
-	return { authenticated: state.auth.authenticated}
+	var {username, authenticated} = state.auth;
+	return { username, authenticated }
 }
 
 export default connect(mapStateToProps, null)(Nav);

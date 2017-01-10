@@ -139,17 +139,22 @@ export function signinUser({login, password}){
 		axios.post('/signin', {login, password})
 			.then((response)=>{				
 				//-update state to indicate user is authenticated
-				dispatch({type: 'AUTH_USER'});
+				var {username} = response.data;
+				dispatch({
+					type: 'AUTH_USER', 
+					payload: username
+				});
 				//-save jwt token
 				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('username', username);
 
 				browserHistory.push('/');
 
-				dispatch(removeErroMessage());
+				dispatch(removeErroMessage());				
 			})
 			.catch(()=>{
 				//- show error message
-				dispatch(setErrorMessage('Bad Login Info'));
+				dispatch(setErrorMessage('Bad Login Info'));				
 			});
 	}	
 }
@@ -163,17 +168,21 @@ export function signupUser({username, email, password}){
 		axios.post('/signup', {username, email, password})
 			.then((response)=>{				
 				//-update state to indicate user is authenticated
-				dispatch({type: 'AUTH_USER'});
+				dispatch({
+					type: 'AUTH_USER', 
+					payload: username
+				});
 				//-save jwt token
 				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('username', username);
 				
 				browserHistory.push('/');
 
-				dispatch(removeErroMessage());
+				dispatch(removeErroMessage());				
 			})
-			.catch(()=>{
+			.catch((e)=>{
 				//- show error message
-				dispatch(setErrorMessage('This email or username are already in use'));
+				dispatch(setErrorMessage('This email or username are already in use'));				
 			});
 	}	
 }

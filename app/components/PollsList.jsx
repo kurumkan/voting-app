@@ -15,7 +15,7 @@ export default class PollsList extends Component{
 	}	
 
 	render (){		
-		var {polls} = this.props;
+		var {polls, title} = this.props;
 		
 		var renderPolls = () => {
 			if(!polls){				
@@ -31,7 +31,7 @@ export default class PollsList extends Component{
 				<div className="col-md-3"></div>
 					<div className="col-md-6">
 						{this.renderAlert()}
-						<h1>Polls</h1>					
+						<h1>{title}</h1>					
 						{renderPolls()}	
 					</div>
 				<div className="col-md-3"></div>				
