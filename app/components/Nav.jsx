@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import activeComponent from 'react-router-active-component';
 import {connect} from 'react-redux';
 import {IndexLink, Link} from 'react-router';
+
+import NavLink from 'NavLink';
 
 class Nav extends Component{	
 
 	renderLinks(){
-		var {authenticated, username} = this.props;
-		var NavLink=activeComponent('li');
+		var {authenticated, username} = this.props;		
 		if(authenticated){
 			return (
 				<div className="collapse navbar-collapse" id="navbar">
 					<ul className="nav navbar-nav">
-						<NavLink to="/" onlyActiveOnIndex>Home</NavLink>							
+						<NavLink to="/">Home</NavLink>							
 						<NavLink to="/mypolls">My Polls</NavLink>							
 						<NavLink to="/polls/new">New Poll</NavLink>							
 					</ul>
@@ -36,7 +36,7 @@ class Nav extends Component{
 			return (
 				<div className="collapse navbar-collapse" id="navbar">
 					<ul className="nav navbar-nav">
-						<NavLink to="/" onlyActiveOnIndex>Home</NavLink>												
+						<NavLink to="/">Home</NavLink>												
 					</ul>
 					<ul className="nav navbar-nav navbar-right">							
 						<NavLink to="/signin">Sign In</NavLink>							
@@ -46,7 +46,6 @@ class Nav extends Component{
 			);
 		}
 	}
-
 	render() {		
 		return (
 			<nav className="navbar navbar-inverse">
@@ -74,7 +73,7 @@ function mapStateToProps(state){
 	return { username, authenticated }
 }
 
-export default connect(mapStateToProps, null)(Nav);
+export default connect(mapStateToProps, null, null, { pure: false })(Nav);
 
 
 
