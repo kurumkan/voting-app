@@ -7,8 +7,8 @@ var morgan = require('morgan');
 
 var {handle500} = require("./lib/utils");
 
-//mongoose.connect(process.env.MONGOLAB_URI);
-mongoose.connect("mongodb://localhost/voting-app");
+mongoose.connect(process.env.MONGOLAB_URI);
+//mongoose.connect("mongodb://localhost/voting-app");
 
 var Poll = require('./models/poll');
 var User = require('./models/user');
@@ -44,7 +44,18 @@ app.get("/api/polls", function(request, response){
 	Poll.find({}).sort("-created").limit(15).exec(function(error, polls){
 		if(error){
 			handle500(response, error);
-		}else{							
+		}else{		
+			
+			polls = polls.map((poll)=>{				
+				return {
+					_id: poll._id,
+					title: poll.title,
+					created: poll.created,
+					author: poll.author.username
+				}	
+			});	
+
+
 			response.json({polls: polls});					
 		}
 	});	
@@ -152,7 +163,6 @@ app.delete("/api/polls/:id", requireAuth, function(request, response){
 //show all the users polls (requires authorization)
 app.get("/api/mypolls", requireAuth, function(request, response){
 
-	//User.findById(request.user._id).populate('polls').sort("-created").limit(15).exec(function(error, data){
 	User.findById(request.user._id)
 		.populate({path: 'polls', options:{sort: {'created': -1}}})
 		.exec(function(error, data){	
@@ -162,7 +172,8 @@ app.get("/api/mypolls", requireAuth, function(request, response){
 				return {
 					_id: poll._id,
 					title: poll.title,
-					created: poll.created
+					created: poll.created,
+					author: poll.author.username
 				}	
 			});			
 			response.json({polls: polls})

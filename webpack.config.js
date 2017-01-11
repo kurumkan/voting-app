@@ -4,7 +4,7 @@ module.exports = {
   entry: [
     'script!jquery/dist/jquery.min.js',
     'script!bootstrap/dist/js/bootstrap.min.js',
-    './app/app.jsx'
+    './view/app.jsx'
   ],
   externals: {
     jquery: 'jQuery'
@@ -23,15 +23,14 @@ module.exports = {
     root: __dirname,
     modulesDirectories: [
       'node_modules',
-      './app/components',
-      './app/api',
+      './view/components',      
       './lib',
-      './app/actions',
-      './app/reducers',
+      './view/actions',
+      './view/reducers',
 
     ],
     alias: {
-      applicationStyles: 'app/styles/app.scss',
+      applicationStyles: 'view/styles/app.scss',
     },
     extensions: ['', '.js', '.jsx']
   },
