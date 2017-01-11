@@ -7,8 +7,9 @@ var morgan = require('morgan');
 
 var {handle500} = require("./lib/utils");
 
-mongoose.connect(process.env.MONGOLAB_URI);
+//mongoose.connect(process.env.MONGOLAB_URI);
 //mongoose.connect("mongodb://localhost/voting-app");
+mongoose.connect('mongodb://kurumkan:fhnehbr1@ds161048.mlab.com:61048/voting-app');
 
 var Poll = require('./models/poll');
 var User = require('./models/user');
