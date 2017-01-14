@@ -7,8 +7,8 @@ var morgan = require('morgan');
 
 var {handle500} = require("./lib/utils");
 
-
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect("mongodb://localhost/voting-app");
+//mongoose.connect(process.env.MONGOLAB_URI);
 
 var Poll = require('./models/poll');
 var User = require('./models/user');
@@ -71,30 +71,31 @@ app.post("/api/polls", requireAuth, function(request, response){
 		username: request.user.username
 	}
 
-	options = options.split(/\r?\n/)
-	    .filter((option)=>option.trim().length);	
+	options = options.split(/\r?\n/);
+
+	//remove duplicates & remove empty string elements
+	options = options.filter((option, pos, self)=>option.trim().length&&options.indexOf(option) == pos);	
 	
 	var formattedOptions = options.map((option)=>{
 		return {
-			label: option						
+			label: option.trim()
 		}
-	});
+	});		
 
 	var poll = {
 		title: title,
 		options: formattedOptions,
 		author: author
-	};	
+	};		
 
 	Poll.create(poll, function(error, newPoll){
-		if(error){			
+		if(error){				
 			handle500(response, error);
 		}else{			
 			User.findById(author.id, function(error, user){
-				if(error){			
+				if(error){								
 					handle500(response, error);		
 				}else{					
-					
 					user.polls.push(newPoll);					
 					user.save();					
 					response.json({id: newPoll._id});					
@@ -119,12 +120,30 @@ app.get("/api/polls/:id", function(request, response){
 //update
 app.put("/api/polls/:id",function(request, response){		
 	var id = request.params.id;		
-	var {title, options} = request.body;
+	var {title, options} = request.body;	
+
+	//merging elements with duplicate label (sum their count)
+	var optionsUnique = [];
+
+	options.forEach(function(option) {
+		var existing = optionsUnique.filter(function(v, i) {
+			return v.label == option.label;
+		});
+
+		if (existing.length) {
+			var existingIndex = optionsUnique.indexOf(existing[0]);
+			optionsUnique[existingIndex].count += option.count;
+		} 
+		else {		
+			optionsUnique.push(option);
+		}
+	});
+
 	
 	var updatedPoll = {
 		title: title,
-		options: options
-	};
+		options: optionsUnique
+	};	
 
 	Poll.findByIdAndUpdate(id, updatedPoll, function(error, poll){
 		if(error)

@@ -7,7 +7,7 @@ var pollSchema = new mongoose.Schema({
 		type: Date, default: Date.now
 	},
 	options: [{
-		label: String,
+		label: {type: String, default: ''},
 		count: {
 			type: Number,  default: 0
 		},

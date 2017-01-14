@@ -76,21 +76,19 @@ class Poll extends Component{
 			var index=-1;
 			poll.options.map((option, i)=>{
 				if(option.label==newLabel)
-					index=i;
+					index=i;				
 				return option;
 			})
-			if(index>0){
-				poll.options[index].count += 1;
+			if(index>=0){
+				poll.options[index].count += 1;				
 			}else{
 				var newOption = {
 					label: newLabel,
 					count: 1,
 					backgroundColor: getRandomColor()
 				};		
-
 				poll.options.push(newOption);	
 			}			
-			
 		}else{
 			var {selectValue}=this.state;
 			var index=+selectValue;
@@ -101,9 +99,9 @@ class Poll extends Component{
 				inputValue: '',
 				selectValue: 0,
 				showTextInput: false
-			},()=>{				
-				this.refs.chart.chart_instance.update();				
-				this.props.updatePoll(id, poll)					
+			},()=>{											
+				this.refs.chart.chart_instance.update();	
+				this.props.updatePoll(id, poll);
 		});
 	}
 
@@ -220,12 +218,12 @@ Poll.contextTypes = {
 }
 
 function mapStateToProps(state) {
-  return {
-    poll: state.polls.poll,    
-    errorMessage: state.error,
-    authenticated: state.auth.authenticated,
-    userid: state.auth.userid
-  };
+	return {
+		poll: state.polls.poll,    
+		errorMessage: state.error,
+		authenticated: state.auth.authenticated,
+		userid: state.auth.userid
+	};
 }
 
 export default connect(mapStateToProps, { getSinglePoll, deletePoll, updatePoll })(Poll);
