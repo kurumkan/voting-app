@@ -25,6 +25,13 @@ export default function(state = INITIAL_STATE, action) {
         userpolls: action.payload.data.polls
       }
 
+    case 'UPDATE_POLL':      
+      return {
+        ...state,
+        poll: action.payload
+      } 
+
+
     default:
       return state;
   }

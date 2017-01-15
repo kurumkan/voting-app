@@ -27,7 +27,10 @@ export function getSinglePoll(id){
 					type: 'GET_SINGLE_POLL',
 					payload: response
 				});
-				dispatch(removeErroMessage());
+				dispatch(removeErroMessage());			
+
+				if(!localStorage.getItem('clientid'))
+					localStorage.setItem('clientid', response.headers.clientid);
 			})
 			.catch((error)=>{								
 				var {status} = error.response;
@@ -56,7 +59,8 @@ export function createPoll(poll){
 			.catch((error)=>{
 				if(error.response.status==401){
 					dispatch(setErrorMessage("Only authorized users can create polls"));	
-				}else{
+				}				
+				else{
 					dispatch(setErrorMessage('Something went wrong. We are working on it.'));	
 				}				
 			})			
@@ -86,18 +90,28 @@ export function deletePoll(id){
 	}
 }
 
-export function updatePoll(id, updatedPoll){
+export function updatePoll(id, originalPoll, updatedPoll){
 	return function(dispatch){
-		axios.put(ROOT_URL+id, updatedPoll)
+		axios.put(ROOT_URL+id, updatedPoll, {
+			headers: {'clientid' : localStorage.getItem('clientid')}				
+		})
 			.then((response)=>{
 				dispatch({
 					type: 'UPDATE_POLL',
-					payload: response
+					payload: updatedPoll
 				});
 				dispatch(removeErroMessage());
 			})
-			.catch(()=>{
-				dispatch(setErrorMessage('Something went wrong. We are working on it.'));
+			.catch((error)=>{
+				dispatch({
+					type: 'UPDATE_POLL',
+					payload: originalPoll
+				});
+
+				if(error.response.status==403)
+					dispatch(setErrorMessage("You have already voted on this poll"));	
+				else
+					dispatch(setErrorMessage('Something went wrong. We are working on it.'));
 			})
 	}	
 }

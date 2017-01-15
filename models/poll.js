@@ -21,7 +21,11 @@ var pollSchema = new mongoose.Schema({
 			ref: "User"
 		},				
 		username: String
-	}
+	},
+	voters: [{
+		type: String
+	}]
+
 });
 
 //before saving (presave) - create Random Colors

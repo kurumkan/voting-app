@@ -4,6 +4,8 @@ var path =require("path");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var morgan = require('morgan');
+var uuid = require('node-uuid');
+
 
 var {handle500} = require("./lib/utils");
 
@@ -20,6 +22,13 @@ app.use(function(req, res, next){
 	}else{		
 		next();
 	}
+});
+
+app.use(function(req, res, next){
+	if(!req.headers["clientid"])
+		res.set('clientid', uuid());
+
+	next();
 });
 
 app.use(morgan('combined'));
@@ -137,19 +146,27 @@ app.put("/api/polls/:id",function(request, response){
 		else {		
 			optionsUnique.push(option);
 		}
-	});
+	});	
 
-	
-	var updatedPoll = {
-		title: title,
-		options: optionsUnique
-	};	
-
-	Poll.findByIdAndUpdate(id, updatedPoll, function(error, poll){
-		if(error)
-			handle500(error);
-		else{			
-			response.json({id: poll._id});				
+	Poll.findById(id, function(error, poll){
+		if(error){								
+			handle500(response, error);		
+		}else{					
+			
+			var clientId = request.headers["clientid"];
+			if(clientId){			
+				if(poll.voters.indexOf(clientId)>=0){			
+					response.status(403);
+					response.json({error: "error: you can vote only once per poll"});		
+				}
+				else{					
+					poll.voters.push(clientId);										
+					poll.options = optionsUnique;					
+					poll.save();				
+						
+					response.json({id: poll._id});									
+				}
+			}			
 		}
 	});
 });

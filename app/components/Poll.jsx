@@ -35,7 +35,7 @@ class Poll extends Component{
 	componentWillMount(){		
 		var id = this.props.params.id;	
 
-		this.props.getSinglePoll(id);			
+		this.props.getSinglePoll(id);
 	}
 
 	handleDelete(e){				
@@ -70,7 +70,10 @@ class Poll extends Component{
 	handleSubmit (e){
 		e.preventDefault();			
 		var newLabel = this.state.inputValue;
-		var {poll} = this.props;
+		var originalPoll = this.props.poll;
+		
+		var poll = JSON.parse(JSON.stringify(originalPoll));
+
 		var id = poll._id;
 		if(newLabel){
 			var index=-1;
@@ -94,19 +97,19 @@ class Poll extends Component{
 			var index=+selectValue;
 			poll.options[index].count += 1;			
 		}		
-
+		
 		this.setState({				
 				inputValue: '',
 				selectValue: 0,
-				showTextInput: false
-			},()=>{											
-				this.refs.chart.chart_instance.update();	
-				this.props.updatePoll(id, poll);
+				showTextInput: false				
+			},()=>{															
+				this.props.updatePoll(id, originalPoll, poll);
+				this.refs.chart.chart_instance.update();									
 		});
 	}
 
 	render(){	
-	    var {poll, authenticated, userid} = this.props;		    
+	    var {poll, authenticated, userid} = this.props;		    	    	    
 
 		if(!poll)
 			return <h3 className="text-center">Loading ...</h3>;
