@@ -6,6 +6,7 @@ import {Doughnut} from 'react-chartjs-2'
 
 import {getRandomColor} from 'utils';
 import {getSinglePoll, deletePoll, updatePoll} from 'Actions';
+import Alert from 'Alert';
 
 
 class Poll extends Component{
@@ -19,17 +20,6 @@ class Poll extends Component{
 		this.handleDelete=this.handleDelete.bind(this);
 		this.handleChange=this.handleChange.bind(this);
 		this.handleSubmit=this.handleSubmit.bind(this);
-	}
-
-	renderAlert(){
-		var {errorMessage} = this.props;
-			if(errorMessage){
-				return (
-				<div className='alert alert-danger'>
-					<strong>Oops!</strong> {errorMessage}
-				</div>
-			)
-		}
 	}
 
 	componentWillMount(){		
@@ -185,7 +175,7 @@ class Poll extends Component{
 			<div className="row">		
 				<div className="col-md-3"></div>
 				<div className="col-md-6">
-					{this.renderAlert()}
+					<Alert />
 					<div className="panel panel-default">
 						<div className="panel-body">
 							<div>
@@ -222,8 +212,7 @@ Poll.contextTypes = {
 
 function mapStateToProps(state) {
 	return {
-		poll: state.polls.poll,    
-		errorMessage: state.error,
+		poll: state.polls.poll,    		
 		authenticated: state.auth.authenticated,
 		userid: state.auth.userid
 	};

@@ -3,17 +3,13 @@ import {reduxForm} from 'redux-form';
 import {Link} from 'react-router';
 
 import * as actions from 'Actions';
+import Alert from 'Alert';
 
-class NewPoll extends Component{
-	renderAlert(){
-		var {errorMessage} = this.props;
-		if(errorMessage){
-			return (
-				<div className='alert alert-danger'>
-					<strong>Oops!</strong> {errorMessage}
-				</div>
-			)
-		}
+
+class NewPoll extends Component{	
+
+	componentWillMount() {
+		this.props.removeErroMessage();
 	}
 
 	handleFormSubmit({title, options}){
@@ -28,7 +24,7 @@ class NewPoll extends Component{
 				<h1 className="text-center">Make a New Poll</h1>
 				<div className="col-md-3"></div>
 				<div className="col-md-6">		
-					{this.renderAlert()}
+					<Alert />
 					<form onSubmit={ handleSubmit(this.handleFormSubmit.bind(this)) }>
 						<div className="form-group">
 							<label htmlFor="title">Title:</label>							
@@ -73,12 +69,8 @@ function validate(fromProps){
 	return errors;
 }
 
-function mapStateToProps(state){
-  	return {errorMessage: state.error}
-}
-
 export default reduxForm({
 	form: 'newpoll',
 	fields: ['title', 'options'],
 	validate: validate
-}, mapStateToProps, actions)(NewPoll);
+}, null, actions)(NewPoll);

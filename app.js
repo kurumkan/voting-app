@@ -62,8 +62,7 @@ app.get("/api/polls", function(request, response){
 					created: poll.created,
 					author: poll.author.username
 				}	
-			});	
-
+			});			
 
 			response.json({polls: polls});					
 		}
@@ -107,7 +106,7 @@ app.post("/api/polls", requireAuth, function(request, response){
 				}else{					
 					user.polls.push(newPoll);					
 					user.save();					
-					response.json({id: newPoll._id});					
+					response.json({id: newPoll._id});
 				}
 			});
 			

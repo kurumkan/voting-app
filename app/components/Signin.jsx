@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import {reduxForm} from 'redux-form';
+
 import * as actions from 'Actions';
+import Alert from 'Alert';
 
 
 class Signin extends Component {
-  renderAlert(){
-    var {errorMessage} = this.props;
-    if(errorMessage){
-      return (
-        <div className='alert alert-danger'>
-          <strong>Oops!</strong> {errorMessage}
-        </div>
-      )
-    }
+  
+  componentWillMount() {
+    this.props.removeErroMessage();
   }
 
   handleFormSubmit({login, password}){
@@ -27,7 +23,7 @@ class Signin extends Component {
         <h1 className="text-center">Sign In</h1>
         <div className="col-md-3"></div>
         <div className="col-md-6">    
-          {this.renderAlert()}
+          <Alert />
           <form onSubmit={ handleSubmit(this.handleFormSubmit.bind(this)) }>
             <div className="form-group">
               <label htmlFor="login">Email or Username:</label>             
@@ -71,12 +67,8 @@ function validate(fromProps){
   return errors;
 }
 
-function mapStateToProps(state){
-  return {errorMessage: state.error}
-}
-
 export default reduxForm({
   form: 'signin',
   fields: ['login', 'password'],
   validate
-}, mapStateToProps, actions)(Signin);
+}, null, actions)(Signin);

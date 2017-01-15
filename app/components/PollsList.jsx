@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
 import PollsListItem from 'PollsListItem';
+import Alert from 'Alert';
 
 export default class PollsList extends Component{
 	
-	renderAlert(){		
-		var {errorMessage} = this.props;
-		if(errorMessage){
-			return (
-				<div className='alert alert-danger'>
-					<strong>Oops!</strong> {errorMessage}
-				</div>
-			)
-		}
-	}	
-
 	render (){		
 		var {polls, title} = this.props;
 		
@@ -30,7 +20,7 @@ export default class PollsList extends Component{
 			<div className="row">		
 				<div className="col-md-3"></div>
 					<div className="col-md-6">
-						{this.renderAlert()}
+						<Alert />
 						<h1>{title}</h1>					
 						{renderPolls()}	
 					</div>

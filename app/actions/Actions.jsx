@@ -54,7 +54,7 @@ export function createPoll(poll){
 					payload: response
 				});				
 				browserHistory.push('polls/'+response.data.id);
-				dispatch(removeErroMessage());
+				dispatch(removeErroMessage());				
 			})
 			.catch((error)=>{
 				if(error.response.status==401){
