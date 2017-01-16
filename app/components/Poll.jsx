@@ -36,20 +36,23 @@ class Poll extends Component{
 
 		return function(e){
 			var value = e.target.value;
-			if(key=='inputValue'){
+			//if change was on the input field
+			if(key=='inputValue'){				
 				this.setState({
 					inputValue: value
 				})
-			}else{								
+			}else{
+			//if change was on select element									
 				var showTextInput=false;
 				
+				//if selected element was 'I would like a custom option'
 				if(value=='newOption'){
 					showTextInput=true;							
 				}
 
 				this.setState({
 					selectValue: value,
-					showTextInput: showTextInput,
+					showTextInput,
 					inputValue: ''
 				});				
 			}
@@ -62,16 +65,21 @@ class Poll extends Component{
 		var newLabel = this.state.inputValue;
 		var originalPoll = this.props.poll;
 		
+		//clone the original poll
 		var poll = JSON.parse(JSON.stringify(originalPoll));
 
 		var id = poll._id;
+
+		//if the custom option was selected
 		if(newLabel){
+
 			var index=-1;
 			poll.options.map((option, i)=>{
 				if(option.label==newLabel)
 					index=i;				
 				return option;
 			})
+			//if the new option already in the list
 			if(index>=0){
 				poll.options[index].count += 1;				
 			}else{
@@ -83,6 +91,7 @@ class Poll extends Component{
 				poll.options.push(newOption);	
 			}			
 		}else{
+		//otherwise just increment count	
 			var {selectValue}=this.state;
 			var index=+selectValue;
 			poll.options[index].count += 1;			
@@ -166,7 +175,12 @@ class Poll extends Component{
 						</select>						
 					</div>	
 					{authenticated&&renderTextInput()}
-					<button type="submit" className='btn btn-success'>Vote</button>					
+					<button type="submit" className='btn btn-success'>Vote</button>		
+					{
+						authenticated&&userid==poll.author.id&&(<div className="pull-right">							
+							<button className="btn btn-danger" onClick={this.handleDelete} >Delete</button>							
+						</div>)
+					}			
 				</form>	
 			);			
 		};	
@@ -186,16 +200,11 @@ class Poll extends Component{
 								    height={1000}								    
 								    options={options}										        
 								/>
-							</div>
-							<div>
-								{renderForm()}
-							</div>
+							</div>							
 						</div>
-						{
-							authenticated&&userid==poll.author.id&&(<div className="panel-footer text-right">							
-								<button className="btn btn-danger" onClick={this.handleDelete} >Delete</button>							
-							</div>)
-						}
+						<div className='panel-footer'>
+							{renderForm()}							
+						</div>						
 					</div>	
 				</div>
 				<div className="col-md-3"></div> 		

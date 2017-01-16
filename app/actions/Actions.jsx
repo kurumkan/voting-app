@@ -3,6 +3,7 @@ import {browserHistory} from 'react-router';
 
 const ROOT_URL = '/api/polls/';
 
+//get list of polls
 export function getPolls(){
 	return function(dispatch){
 		axios.get(ROOT_URL)
@@ -19,6 +20,7 @@ export function getPolls(){
 	}	
 }
 
+//get a poll
 export function getSinglePoll(id){
 	return function(dispatch){
 		axios.get(ROOT_URL+id)
@@ -27,8 +29,9 @@ export function getSinglePoll(id){
 					type: 'GET_SINGLE_POLL',
 					payload: response
 				});
-				dispatch(removeErroMessage());			
+				dispatch(removeErroMessage());	
 
+				//set clientid
 				if(!localStorage.getItem('clientid'))
 					localStorage.setItem('clientid', response.headers.clientid);
 			})
@@ -116,6 +119,7 @@ export function updatePoll(id, originalPoll, updatedPoll){
 	}	
 }
 
+//get the current user's list of polls (user must be logged in)
 export function getUserPolls(){	
 	return function(dispatch){
 		axios.get('/api/mypolls', {

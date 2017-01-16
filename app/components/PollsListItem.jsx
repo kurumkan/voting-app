@@ -13,11 +13,11 @@ export default class PollsListItem extends Component{
 				<div className="panel-body">
 					<h3>								
 						<Link to={"/polls/"+_id}>{title}</Link>									
-					</h3>					
-					<span className='text-right'>
-						Created {moment(created).format('DD MMMM YYYY')} by {author}
-					</span>
-				</div>
+					</h3>									
+				</div>							
+				<div className='panel-footer'>
+					Created {moment(created).format('DD MMMM YYYY')} by {author}
+				</div>				
 			</div>		
 		);	
 	}

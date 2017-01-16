@@ -4,6 +4,8 @@ import {reduxForm} from 'redux-form';
 import * as actions from 'Actions';
 import Alert from 'Alert';
 
+var {validateEmail} = require("utils");
+
 
 class Signup extends Component {
   
@@ -80,6 +82,10 @@ function validate(fromProps){
 
   if(!fromProps.email){
     errors.email = 'Please enter an email';
+  }
+
+  if(!validateEmail(fromProps.email)){
+    errors.email = "It doesn't look like a valid email";    
   }
 
   if(!fromProps.password){

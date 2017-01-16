@@ -1,4 +1,11 @@
 @import "base/variables";
+@import "components/navbar";
+@import "components/alert";
+
+body{
+    font-family: 'Raleway', sans-serif;
+    background-color: #f0f0f0;
+}
 
 .btn{
 	margin-right: 5px;
@@ -6,3 +13,8 @@
 .dropdown-menu{
 	padding: 5px;
 }
+.glyphicon{
+	display: inline-block;
+	margin-right: 5px;
+}
+

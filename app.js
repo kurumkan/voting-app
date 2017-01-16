@@ -9,8 +9,9 @@ var uuid = require('node-uuid');
 
 var {handle500} = require("./lib/utils");
 
-//mongoose.connect("mongodb://localhost/voting-app");
-mongoose.connect(process.env.MONGOLAB_URI);
+//mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect("mongodb://localhost/voting-app");
+
 
 var Poll = require('./models/poll');
 var User = require('./models/user');

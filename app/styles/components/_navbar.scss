@@ -1,0 +1,30 @@
+.navbar-custom {
+    background-color:#ef6262;
+    color:#fff;
+    border-radius:0;
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:#fff;
+}
+.navbar-custom .navbar-nav > .active > a, 
+.navbar-nav > .active > a:hover, 
+.navbar-nav > .active > a:focus,
+.nav > li > a:focus, 
+.nav > li > a:hover,
+.nav .open > a, 
+.nav .open > a:focus, 
+.nav .open > a:hover,
+.navbar-toggle,
+.btn-custom-danger {
+    color: #ffffff;
+    background-color:#ec4444;
+}
+
+.icon-bar{
+	background: #fff;
+}
+
+.navbar-custom .navbar-brand {
+    color:#eeeeee;
+}

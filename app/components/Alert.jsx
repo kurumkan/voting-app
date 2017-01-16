@@ -7,7 +7,7 @@ class Alert extends Component{
 		var {errorMessage} = this.props;
 			if(errorMessage)
 				return (
-					<div className='alert alert-danger alert-dismissable fade in'>
+					<div className='alert alert-custom alert-dismissable fade in'>
 					    <a href='#' className='close' data-dismiss='alert' aria-label='close'>&times;</a>
 						<strong>Oops!</strong> {errorMessage}
 					</div>

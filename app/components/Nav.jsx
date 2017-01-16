@@ -14,7 +14,10 @@ class Nav extends Component{
 					<ul className="nav navbar-nav">
 						<NavLink to="/">Home</NavLink>							
 						<NavLink to="/mypolls">My Polls</NavLink>							
-						<NavLink to="/polls/new">New Poll</NavLink>							
+						<NavLink to="/polls/new">
+							<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> 
+							New Poll
+						</NavLink>							
 					</ul>
 					<ul className="nav navbar-nav navbar-right">							
 						<li className="dropdown">
@@ -24,8 +27,11 @@ class Nav extends Component{
 								{username} <span className="caret"></span>
 							</a>
 							<ul className="dropdown-menu">
-								<li>
-									<Link to='/signout' className='btn btn-danger btn-block'>Sing Out</Link>																	
+								<li>									
+									<Link to='/signout' className='btn btn-custom-danger btn-block'>
+										<span className="glyphicon glyphicon-off" aria-hidden="true"></span> 
+										Sign Out
+									</Link>																	
 								</li>								
 							</ul>
 						</li>
@@ -48,7 +54,7 @@ class Nav extends Component{
 	}
 	render() {		
 		return (
-			<nav className="navbar navbar-inverse">
+			<nav className="navbar navbar-custom">
 				<div className="container-fluid">
 					<div className="navbar-header">
 						<button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar">
@@ -57,7 +63,7 @@ class Nav extends Component{
 							<span className="icon-bar"></span>
 						</button>      			
 						<IndexLink className="navbar-brand" to="/">
-							<span className="glyphicon glyphicon-star-empty" aria-hidden="true"></span> 
+							<span className="glyphicon glyphicon-ok" aria-hidden="true"></span> 
 							Voting App
 						</IndexLink>						
 					</div>					

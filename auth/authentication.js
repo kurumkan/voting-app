@@ -2,6 +2,7 @@ var jwt = require('jwt-simple');
 
 var config = require('./config');
 var User = require('../models/user');
+var {validateEmail} = require("../lib/utils");
 
 function getToken(user){
 	var timestamp = new Date().getTime();
@@ -16,6 +17,9 @@ exports.signup = function(request, response, next){
 	
 	if(!username || !email || !password)
 		response.status(422).json({error: 'You must provide a username, an email and a password'});
+
+	if(!validateEmail(email))
+		response.status(422).json({error: 'Invalid email'});
 	
 	//see if a user exists
 	User.findOne({$or: [{email: email}, {username: username}]}, function(error, user){

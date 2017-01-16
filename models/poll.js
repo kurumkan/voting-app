@@ -22,6 +22,7 @@ var pollSchema = new mongoose.Schema({
 		},				
 		username: String
 	},
+	//save data from clientid header
 	voters: [{
 		type: String
 	}]
