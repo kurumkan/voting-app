@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import Chart from 'chart.js';
-import {Doughnut} from 'react-chartjs-2'
+import {Doughnut} from 'react-chartjs-2';
 
 import {getRandomColor} from 'utils';
 import {getSinglePoll, deletePoll, updatePoll} from 'Actions';
@@ -113,8 +114,7 @@ class Poll extends Component{
 		if(!poll)
 			return <h3 className="text-center">Loading ...</h3>;
 		
-		var {options, title, _id} = poll;				
-
+		var {options, title, _id, created, author} = poll;				
 
 		var labels = options.map((option)=>option.label);
 		var backgroundColor = options.map((option)=>option.backgroundColor);
@@ -127,12 +127,8 @@ class Poll extends Component{
 				data: data
 			}]
 		};				
-		var options = {
-			title: {
-				display: true,
-				text: title
-			},
-			cutoutPercentage: 40
+		var options = {			
+			cutoutPercentage: 50
 		};
 
 
@@ -191,6 +187,23 @@ class Poll extends Component{
 				<div className="col-md-6">
 					<Alert />
 					<div className="panel panel-default">
+						<div className="panel-heading">	
+							<div className='pull-left'>					
+								<div className="poll-title">{title}</div>							
+								<span className="poll-small">Created {moment(created).format('DD MMMM YYYY')} by {author.username}</span>
+							</div>	
+
+							<div className="text-right">
+								<a href={"https://twitter.com/intent/tweet?text=Poll: "+encodeURIComponent(title+' '+location)} title="Tweet this poll!" target="_blank" id="twitter-link">
+									<span className="fa fa-twitter-square social-button"></span>
+								</a>
+								<a href={"https://www.facebook.com/sharer/sharer.php?u="+location} target="_blank">
+  									<i className="fa fa-facebook-official social-button" aria-hidden="true"></i>
+								</a>
+							</div>
+
+
+						</div>
 						<div className="panel-body">
 							<div>
 								<Doughnut	

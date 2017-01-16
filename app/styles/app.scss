@@ -1,6 +1,7 @@
 @import "base/variables";
 @import "components/navbar";
 @import "components/alert";
+@import "components/poll";
 
 body{
     font-family: 'Raleway', sans-serif;
@@ -17,4 +18,13 @@ body{
 	display: inline-block;
 	margin-right: 5px;
 }
+.social-button{
+	font-size: 30px!important;
+	margin-right: 5px;
+	color: #ef6262;	
+	height: 50px;
+	line-height: 50px;
+}
+.panel-heading{
 
+}
