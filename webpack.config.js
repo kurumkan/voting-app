@@ -10,6 +10,13 @@ module.exports = {
     jquery: 'jQuery'
   },
   plugins: [
+  new webpack.DefinePlugin({
+  "process.env": { 
+     NODE_ENV: JSON.stringify("production") 
+   }
+})
+,
+  
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery'
@@ -50,5 +57,5 @@ module.exports = {
       }
     ]
   },
-  devtool: 'cheap-module-eval-source-map'
+  devtool: 'source-map'
 };
