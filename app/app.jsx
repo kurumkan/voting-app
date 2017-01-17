@@ -6,9 +6,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 
-
-//Load bootstrap
-require('style!css!bootstrap/dist/css/bootstrap.min.css');
 // App css
 require('style!css!sass!applicationStyles');
 

@@ -11,8 +11,6 @@ var {handle500} = require("./lib/utils");
 
 mongoose.connect(process.env.MONGOLAB_URI);
 
-
-
 var Poll = require('./models/poll');
 var User = require('./models/user');
 
