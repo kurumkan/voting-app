@@ -49,12 +49,6 @@ new ExtractTextPlugin("bundle.css", {allChunks: false}),
     "process.env": { 
        NODE_ENV: JSON.stringify("production") 
       }
-    }),  
-
-
-    new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery'
     })
   ],
   output: {
