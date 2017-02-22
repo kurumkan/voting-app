@@ -9,7 +9,7 @@ module.exports = {
   ],  
   plugins: [
  
-new ExtractTextPlugin("bundle.css", {allChunks: false}),
+    new ExtractTextPlugin("bundle.css", {allChunks: false}),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),

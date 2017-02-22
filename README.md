@@ -1,6 +1,6 @@
 ##Voting app
 
-For [freecodecamp.com](https://www.freecodecamp.com/)
+For [Freecodecamp.com](https://www.freecodecamp.com/)
 
 [Basejumps: Build a Voting App](https://www.freecodecamp.com/challenges/build-a-voting-app)
 
